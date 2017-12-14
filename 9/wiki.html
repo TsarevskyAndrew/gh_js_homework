@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Wikipedia</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</head>
+<body>
+
+<div class="all">
+	<h3>WikiSearch</h3>
+	<label for="searcher"></label>
+	<input type="text" id="searcher">
+	<button id="search" class="btn">search</button>
+	<div id="out"></div>
+</div>
+
+<style>
+.all {
+	margin: 5px;
+	padding: 5px;
+}
+#searcher {	width: 30%;}
+h2 {
+	color: blue;
+	padding-left: 1%;
+	padding-right: 1%;
+}
+a {color: black;
+   text-decoration: none;
+ }
+a:hover {text-decoration: underline;}
+</style>
+
+<script>
+    $('#search').on('click', function () {
+		var out = $('#out');
+		var searcher = $('#searcher').val();
+		var urlStr = 'https://ru.wikipedia.org/w/api.php?action=opensearch&search=' + searcher + '&format=json&callback=?';
+		$.ajax({
+			url: urlStr,
+			type: 'GET',
+			contentType: 'application/json; charset=utf-8',
+			async: false,
+			dataType: 'json',
+			success: function (data, status, jqXHR) {
+				out.html();
+				for (var i = 0; i < data[1].length; i++) {
+					out.prepend('<div><div class="text"><a href=' + data[3][i] + '><h2>' + data[1][i]+ '</h2>' + '<p>' + data[2][i] + '</p></a></div> </div>')
+				}
+			}
+		})
+			
+	});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Simple Map</title>
+    <meta name="viewport" content="initial-scale=1.0">
+    <meta charset="utf-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCPME5U73KRNBD-MvPRktivYaXorNTFnB4"></script>
+    <style>
+      #map { height: 85%; }
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+     <input id="input" type="text" placeholder="Address" value="Черкасcы">
+     <button id="btn" onclick="run()">Поиск</button>
+     <p id="lat"></p>
+     <p id="lng"></p>
+     <div id="map"></div>
+
+    <script>
+      function run() {
+      let location = {};
+      jQuery.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${input.value},&key=AIzaSyCPME5U73KRNBD-MvPRktivYaXorNTFnB4`,
+         function (req) {
+            if (req.status !== 'ZERO_RESULTS') {
+                location = req.results[0].geometry.location;
+                lat.textContent = 'Долгота : ' + location.lat;
+                lng.textContent = 'Широта : ' + location.lng;
+                initMap(location);
+            } else {
+                alert('Введите название правильно!')
+            }
+          }
+      )}
+        
+      var map;
+      function initMap(location) {
+          map = new google.maps.Map(document.getElementById('map'), {
+          center: location,
+          zoom: 12
+        });
+      }
+    </script>
+    
+  </body>
+</html>
