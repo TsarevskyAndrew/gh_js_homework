@@ -1,3 +1,25 @@
+let victorylist = JSON.parse(localStorage.getItem('allList')) || [15,9];
+
+function getStorageData () {
+    if (victorylist.length > 0) {
+        let tableHead = document.getElementById('tableHead');
+        for (let i = 0; i < victorylist.length; i++) {
+            let tr = document.createElement('tr');
+            for (let data in victorylist[i]) {
+                let th = document.createElement('th');
+                if (data.toString() === 'time') {
+                    th.innerText = secondsTohhmmss(victorylist[i][data]);
+                } else  {
+                    th.innerText = victorylist[i][data];
+                }
+                tr.appendChild(th);
+            }
+            tableHead.appendChild(tr)
+        }
+    }
+}
+getStorageData ();
+
 function init() {
     var puzzleField = document.getElementById("puzzleField");
     var reset = document.getElementById("reset"); 
@@ -27,6 +49,8 @@ function init() {
         context.fillRect(0, 0, puzzleField.width, puzzleField.height);
         field.draw(context, cellSize);
         if (field.victory()) { 
+            victorylist.push(field.getClicks());
+            localStorage.setItem('allList', JSON.stringify(victorylist));
             alert("Собрано за " + field.getClicks() + " ходов!"); 
             field.mix(300);
             context.fillStyle = "#222";
